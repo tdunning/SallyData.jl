@@ -1,4 +1,4 @@
-module sally
+module SallyScope
 
 # read analog data from a Salae oscilloscope binary dump
 

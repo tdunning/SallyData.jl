@@ -1,6 +1,6 @@
 using Test
 
-using sally
+using SallyScope
 let s = readWave("./test_analog_0.bin")
     @test s[1].num_samples == 382
 
