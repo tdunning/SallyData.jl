@@ -43,3 +43,13 @@ julia> findPeaks(s, 590:5:610)
  67.35667
  70.97655
  ```
+# Installation
+
+Since this package hasn't been added to the Julia registry yet, you have to install it using the explicit GitHub
+URL. To do this, start Julia and run the following command:
+
+```julia
+julia> Pkg.add("https://github.com/tdunning/sally.jl.git")
+```
+
+This will spend a few seconds compiling and you should be good to go.
