@@ -28,20 +28,21 @@ julia> using SallyScope
 julia> s500 = sin.(LinRange(0, 2π * 500, 100_000));
 julia> s600 = sin.(LinRange(0, 2π * 600, 100_000));
 julia> signal = SallyScope.WaveForm(0, 0, 1e5, 1, 100_000, s500 + 2 * s600 + 10.0 * randn(100_000));
+julia> s = spectrum(signal, 1000)
 julia> findPeaks(s, 490:5:510)
 5-element Vector{Float32}:
- 64.842316
- 72.46116
- 88.28233
- 57.876255
- 67.415985
+ -20.76475
+ -29.737362
+  -5.8857365
+ -22.244469
+ -27.489155
 julia> findPeaks(s, 590:5:610)
 5-element Vector{Float32}:
- 68.96326
- 65.275764
- 93.94074
- 67.35667
- 70.97655
+ -27.415148
+ -27.061394
+  -0.30487803
+ -30.2041
+ -25.026798
  ```
 # Installation
 
