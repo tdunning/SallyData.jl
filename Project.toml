@@ -1,0 +1,12 @@
+name = "sally"
+uuid = "bdc509e6-e5f8-4c54-b183-09f7d375e776"
+version = "0.1.0"
+authors = ["Ted Dunning <ted.dunning@gmail.com>"]
+
+[deps]
+FFTW = "7a1cc6ca-52ef-59f5-83cd-3a7055c09341"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[compat]
+FFTW = "1.10.0"
+Test = "1.11.0"
