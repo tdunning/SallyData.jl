@@ -2,8 +2,8 @@ module SallyScope
 
 # read analog data from a Salae oscilloscope binary dump
 
-export Spectrum, spectrum, findPeaks, readWave
-using FFTW
+export Spectrum, spectrum, findPeaks, readWave, readCSV, downsample
+using FFTW, CSV, DataFrames, Statistics
 
 struct Header
     identifier::String
@@ -81,6 +81,45 @@ function readWave(fx...)
     return r
 end
 
+"""
+Reads a single trace from a CSV file that has the analog waveform in CSV form. This waveform
+can have a single column that is the signal with no time information or it can have one
+column for time and one for the waveform.
+
+To read a file with voltage in the field called "volts" and a sample rate of 1Gs/s use this:
+```
+x = readCSV(filename, "volts", sampleRate=1e9)
+```
+
+To read a file with a time field called "t" use something like this
+```
+readCSV(filename, "volts", time="t")
+```
+In either case, the variable `x` will contain a waveform structure.
+"""
+function readCSV(fx::String, v::String; time::String="", sampleRate::Number=0.0)
+    x = CSV.read(fx, DataFrame)
+    if time == "" && sampleRate == 0.0
+    end
+
+    if time != ""
+        dt = mean(diff(x[!,time]))
+        sd = std(diff(x[!,time]))
+        if isnan(dt) || dt <= 0.0 || sd > 0.02 * dt
+            error("time column $time does not have valid and evenly spaced time values")
+        end
+        sampleRate = 1/dt
+    elseif sampleRate == 0.0
+        error("must specify either name of column containing time or sampleRate")
+    end
+    return WaveForm(0.0, 0.0, sampleRate, 1, size(x,1), x[!,v])
+end
+
+function downsample(s::WaveForm, windowSize; f=maximum)
+    let r = [f(s.samples[i:i+windowSize]) for i in 1:windowSize:(1000-windowSize+1)]
+        WaveForm(s.begin_time, s.trigger_time, s.sample_rate/windowSize, s.downsample * windowSize, length(r), r)
+    end
+end
 
 function readHeader(f)::Header
     id = zeros(UInt8, 8)
